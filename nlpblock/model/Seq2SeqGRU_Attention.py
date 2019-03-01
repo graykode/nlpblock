@@ -2,16 +2,16 @@ import torch
 import torch.nn as nn
 import nlpblock as nb
 
-class Seq2SeqBiRNN_Attention(nn.Module):
+class Seq2SeqGRU_Attention(nn.Module):
     def __init__(self, n_enc_vocab, n_dec_vocab, n_hidden,
                  bidirectional, linearTransform):
-        super(Seq2SeqBiRNN_Attention, self).__init__()
+        super(Seq2SeqGRU_Attention, self).__init__()
 
         self.n_hidden = n_hidden
         self.num_directions = 2 if bidirectional is True else 1
 
-        self.encoder = nb.RNN(input_size=n_enc_vocab, hidden_size=n_hidden, bidirectional=bidirectional)
-        self.decoder = nb.RNN(input_size=n_dec_vocab, hidden_size=n_hidden, bidirectional=bidirectional)
+        self.encoder = nb.GRU(input_size=n_enc_vocab, hidden_size=n_hidden, bidirectional=bidirectional)
+        self.decoder = nb.GRU(input_size=n_dec_vocab, hidden_size=n_hidden, bidirectional=bidirectional)
 
         self.attention = nb.AttentionTwo(n_dec_vocab, n_hidden,
                                          bidirectional=bidirectional, linearTransform=linearTransform)
@@ -33,8 +33,8 @@ class Seq2SeqBiRNN_Attention(nn.Module):
 
 """
 Example to run
-model = Seq2SeqBiRNN_Attention(n_enc_vocab=20, n_dec_vocab=30,
-                                    n_hidden=128, bidirectional=True, linearTransform=True)
+model = Seq2SeqGRU_Attention(n_enc_vocab=20, n_dec_vocab=30,
+                                    n_hidden=128, bidirectional=False, linearTransform=True)
 output,attention = model(
     torch.rand([3, 5, 20]), # [batch, enc_seq_len, n_enc_vocab]
     torch.rand([3, 7, 30])  # [batch, den_seq_len, n_dec_vocab]

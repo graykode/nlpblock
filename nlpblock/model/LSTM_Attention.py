@@ -2,10 +2,10 @@ import torch
 import torch.nn as nn
 import nlpblock as nb
 
-class BiLSTM_Attention(nn.Module):
+class LSTM_Attention(nn.Module):
     def __init__(self, n_vocab, emb_dim,
                  n_class, n_hidden, bidirectional=False, linearTransform=True):
-        super(BiLSTM_Attention, self).__init__()
+        super(LSTM_Attention, self).__init__()
 
         self.n_hidden = n_hidden
         self.num_directions = 2 if bidirectional is True else 1
@@ -27,8 +27,8 @@ class BiLSTM_Attention(nn.Module):
 
 """
 Example to run
-model = BiLSTM_Attention(n_vocab=200, emb_dim=50,
-                         n_class=2, n_hidden=128, bidirectional=True, linearTransform=True)
+model = LSTM_Attention(n_vocab=200, emb_dim=50,
+                         n_class=2, n_hidden=128, bidirectional=False, linearTransform=True)
 output = model(
     torch.zeros(4, 10).to(torch.long) # [batch, seq_len]
 )

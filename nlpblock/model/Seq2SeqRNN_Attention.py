@@ -2,10 +2,10 @@ import torch
 import torch.nn as nn
 import nlpblock as nb
 
-class Seq2SeqBiRNN_Attention(nn.Module):
+class Seq2SeqRNN_Attention(nn.Module):
     def __init__(self, n_enc_vocab, n_dec_vocab, n_hidden,
                  bidirectional, linearTransform):
-        super(Seq2SeqBiRNN_Attention, self).__init__()
+        super(Seq2SeqRNN_Attention, self).__init__()
 
         self.n_hidden = n_hidden
         self.num_directions = 2 if bidirectional is True else 1
@@ -33,7 +33,7 @@ class Seq2SeqBiRNN_Attention(nn.Module):
 
 """
 Example to run
-model = Seq2SeqBiRNN_Attention(n_enc_vocab=20, n_dec_vocab=30,
+model = Seq2SeqRNN_Attention(n_enc_vocab=20, n_dec_vocab=30,
                                     n_hidden=128, bidirectional=True, linearTransform=True)
 output,attention = model(
     torch.rand([3, 5, 20]), # [batch, enc_seq_len, n_enc_vocab]
