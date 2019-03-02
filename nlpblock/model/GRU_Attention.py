@@ -3,14 +3,13 @@ import torch.nn as nn
 import nlpblock as nb
 
 class GRU_Attention(nn.Module):
-    def __init__(self, n_vocab, emb_dim,
+    def __init__(self, emb_dim,
                  n_class, n_hidden, bidirectional=False, linearTransform=True):
         super(GRU_Attention, self).__init__()
 
         self.n_hidden = n_hidden
         self.num_directions = 2 if bidirectional is True else 1
 
-        self.embedding = nn.Embedding(n_vocab, emb_dim)
         self.gru = nb.GRU(emb_dim, n_hidden, bidirectional=bidirectional)
         self.attention = nb.AttentionOne(n_class, n_hidden,
                                          bidirectional=bidirectional, linearTransform=linearTransform)
@@ -19,18 +18,16 @@ class GRU_Attention(nn.Module):
         batch = input.size(0)
         return torch.rand([self.num_directions, batch, self.n_hidden])
 
-    def forward(self, X):
-        input = self.embedding(X)
-        outputs, _ = self.gru(input, self.hidden_init(X))
-        output = self.attention(outputs)
-        return output
+    def forward(self, input):
+        outputs, _ = self.gru(input, self.hidden_init(input))
+        return outputs, self.attention(outputs)
 
 """
 Example to run
-model = GRU_Attention(n_vocab=200, emb_dim=50,
+model = GRU_Attention(emb_dim=50,
                          n_class=2, n_hidden=128, bidirectional=False, linearTransform=True)
-output = model(
-    torch.zeros(4, 10).to(torch.long) # [batch, seq_len]
+output, attention = model(
+    torch.rand([3, 5, 50])  # [batch, seq_len, emb_dim]
 )
-print(output.shape)
+print(output.shape, attention.shape)
 """
