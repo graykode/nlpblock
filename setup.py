@@ -32,7 +32,7 @@ setup_info = dict(
     long_description=long_description,
     long_description_content_type='text/markdown',
     license='MIT',
-    install_requires=[ 'tqdm', 'torch', 'numpy', 'torchtext'],
+    install_requires=[ 'tqdm', 'torch', 'numpy', 'torchsummary'],
 
     # Package info
     packages=find_packages(exclude=('tests',)),

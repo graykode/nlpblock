@@ -1,3 +1,7 @@
+"""
+    code by Tae Hwan Jung(Jeff Jung) @graykode
+    Reference : https://github.com/hunkim/PyTorchZeroToAll/blob/master/14_2_seq2seq_att.py
+"""
 import torch
 import torch.nn as nn
 from nlpblock.layer.Attention import Attention
@@ -9,8 +13,8 @@ class AttentionTwo(Attention):
     In general, I call first model as Encdoer, second model as Decoder
     """
 
-    def __init__(self, n_dec_vocab, n_hidden, bidirectional=False, linearTransform=True):
-        super(AttentionTwo, self).__init__(n_hidden, bidirectional, linearTransform)
+    def __init__(self, n_dec_vocab, n_hidden, n_layers=1, bidirectional=False, linearTransform=True):
+        super(AttentionTwo, self).__init__(n_hidden, n_layers, bidirectional, linearTransform)
         self.n_dec_vocab = n_dec_vocab
         self.num_directions = 2 if bidirectional is True else 1
         self.classifier = nn.Linear(self.n_hidden * 2, n_dec_vocab, bias=False)

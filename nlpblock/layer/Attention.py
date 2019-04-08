@@ -9,7 +9,7 @@ class Attention(nn.Module):
     I recommend you read first Attention mechanism paper, https://arxiv.org/abs/1409.0473
     """
 
-    def __init__(self, n_hidden, bidirectional=False, linearTransform=True):
+    def __init__(self, n_hidden, n_layers, bidirectional=False, linearTransform=True):
         """
         :param n_hidden: number of hidden size in Cell units
         :param bidirectional, if True, number of direction is two, false is one, default : True
@@ -21,6 +21,7 @@ class Attention(nn.Module):
         super(Attention, self).__init__()
         self.num_directions = 2 if bidirectional is True else 1
         self.n_hidden = n_hidden * self.num_directions
+        self.n_layers = n_layers
         self.bidirectional = bidirectional
 
         self.linearTransform = linearTransform

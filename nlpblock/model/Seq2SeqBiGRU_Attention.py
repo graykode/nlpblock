@@ -4,7 +4,7 @@ import nlpblock as nb
 
 class Seq2SeqBiGRU_Attention(nn.Module):
     def __init__(self, n_enc_vocab, n_dec_vocab, n_hidden,
-                 bidirectional, linearTransform):
+                 n_layers=1, bidirectional=False, linearTransform=True):
         super(Seq2SeqBiGRU_Attention, self).__init__()
 
         self.n_hidden = n_hidden
@@ -14,7 +14,7 @@ class Seq2SeqBiGRU_Attention(nn.Module):
         self.decoder = nb.GRU(input_size=n_dec_vocab, hidden_size=n_hidden, bidirectional=bidirectional)
 
         self.attention = nb.AttentionTwo(n_dec_vocab, n_hidden,
-                                         bidirectional=bidirectional, linearTransform=linearTransform)
+                                         n_layers=n_layers, bidirectional=bidirectional, linearTransform=linearTransform)
 
     def hidden_init(self, enc_input):
         batch = enc_input.size(0)
@@ -34,7 +34,7 @@ class Seq2SeqBiGRU_Attention(nn.Module):
 """
 Example to run
 model = Seq2SeqBiGRU_Attention(n_enc_vocab=20, n_dec_vocab=30,
-                                    n_hidden=128, bidirectional=True, linearTransform=True)
+                                    n_hidden=128, n_layers=1, bidirectional=True, linearTransform=True)
 output,attention = model(
     torch.rand([3, 5, 20]), # [batch, enc_seq_len, n_enc_vocab]
     torch.rand([3, 7, 30])  # [batch, den_seq_len, n_dec_vocab]

@@ -1,3 +1,7 @@
+"""
+    code by Tae Hwan Jung(Jeff Jung) @graykode
+    Reference : https://github.com/hunkim/PyTorchZeroToAll/blob/master/14_2_seq2seq_att.py
+"""
 import torch
 import torch.nn as nn
 from nlpblock.layer.Attention import Attention
@@ -7,8 +11,8 @@ class AttentionOne(Attention):
     Classes for only `ONE` time sequence Model such as RNN, LSTM, etc
     When forward in this class, We make query from only RNN, LSTM outputs parameter(=All time steps of output in time sequence Model)
     """
-    def __init__(self, n_class, n_hidden, bidirectional=False, linearTransform=True):
-        super(AttentionOne, self).__init__(n_hidden, bidirectional, linearTransform)
+    def __init__(self, n_class, n_hidden, n_layers=1, bidirectional=False, linearTransform=True):
+        super(AttentionOne, self).__init__(n_hidden, n_layers, bidirectional, linearTransform)
         self.n_class = n_class
         self.num_directions = 2 if bidirectional is True else 1
         self.classifier = nn.Linear(self.n_hidden, n_class, bias=False)
@@ -38,7 +42,7 @@ class AttentionOne(Attention):
                 query[i][0] = outputs[i][last][0]  # get vector outputs of last time step, forward direction
 
         # reshape to original matrix shape
-        outputs = outputs.view(batch, seq_len, -1) # output to [batch, seq_len, num_directions  n_hidden]
+        outputs = outputs.view(batch, seq_len, -1) # output to [batch, seq_len, num_directions * n_hidden]
         query = query.view(batch, -1)              # query  to [batch, num_directions * n_hidden]
 
         attn_softmax_vector = self.get_attn_vector(outputs, query)
